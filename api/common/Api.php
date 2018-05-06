@@ -27,7 +27,7 @@ class Api
      * 允许访问的请求类型
      * @var string
      */
-    public $restMethodList = 'post|put|delete|patch|head|options';
+    public $restMethodList = 'get|post|put|delete|patch|head|options';
 
     /**
      * Api constructor.

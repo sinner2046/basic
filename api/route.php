@@ -12,10 +12,5 @@ use think\Route;
 
 Route::miss('Error/index');
 
-Route::resource(':version/index',':version/Index');
+Route::resource('v1/index','v1/Index');
 
-return [
-    '__pattern__' => [
-        'name' => '\w+',
-    ],
-];

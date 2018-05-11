@@ -1,4 +1,4 @@
-(function($) {
+(function ($) {
   $.extend($.summernote.lang, {
     'tr-TR': {
       font: {
@@ -32,8 +32,7 @@
         maximumFileSize: 'Maksimum dosya boyutu',
         maximumFileSizeError: 'Maksimum dosya boyutu aşıldı.',
         url: 'Resim bağlantısı',
-        remove: 'Resimi Kaldır',
-        original: 'Original'
+        remove: 'Resimi Kaldır'
       },
       video: {
         video: 'Video',
@@ -52,14 +51,7 @@
         openInNewWindow: 'Yeni pencerede aç'
       },
       table: {
-        table: 'Tablo',
-        addRowAbove: 'Yukarı satır ekle',
-        addRowBelow: 'Aşağı satır ekle',
-        addColLeft: 'Sola sütun ekle',
-        addColRight: 'Sağa sütun ekle',
-        delRow: 'Satırı sil',
-        delCol: 'Sütunu sil',
-        delTable: 'Tabloyu sil'
+        table: 'Tablo'
       },
       hr: {
         insert: 'Yatay çizgi ekle'

@@ -44,10 +44,11 @@ class Index extends Admin
      */
     public function wipeCache()
     {
-        if (!empty(config('wipe_cache_type'))) {
-            foreach (config('wipe_cache_type') as $item) {
+        $wipe_cache_type = config('wipe_cache_type');
+        if (!empty($wipe_cache_type)) {
+            foreach ($wipe_cache_type as $item) {
                 if ($item == 'LOG_PATH') {
-                    $dirs = (array)glob(constant($item) . '*');
+                    $dirs = (array) glob(constant($item) . '*');
                     foreach ($dirs as $dir) {
                         array_map('unlink', glob($dir . '/*.log'));
                     }
@@ -104,7 +105,7 @@ class Index extends Admin
                 ['text', 'mobile', '手机号'],
                 ['image', 'avatar', '头像']
             ])
-            ->setFormData($info)// 设置表单数据
+            ->setFormData($info) // 设置表单数据
             ->fetch();
     }
 }

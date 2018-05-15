@@ -400,6 +400,9 @@ var App = function() {
                                     .addClass($iconFullscreen);
                             }
                         }
+                        if (typeof(init_table) === "function") {
+                            init_table();
+                        }
                         break;
                     case 'fullscreen_on':
                         $elBlock.addClass('block-opt-fullscreen');
@@ -583,6 +586,18 @@ var App = function() {
         });
     };
 
+    // Add the correct copyright year
+    var uiYearCopy = function() {
+        var $date       = new Date();
+        var $yearCopy   = jQuery('.js-year-copy');
+
+        if ($date.getFullYear() === 2015) {
+            $yearCopy.html('2015');
+        } else {
+            $yearCopy.html('2015-' + $date.getFullYear().toString().substr(2,2));
+        }
+    };
+
     // Manage page loading screen functionality
     var uiLoader = function($mode) {
         var $lpageLoader = jQuery('#page-loader');
@@ -666,13 +681,14 @@ var App = function() {
         // For each table
         jQuery('.js-table-checkable').each(function(){
             var $table = jQuery(this);
+            var $table_target = jQuery('.js-table-checkable-target');
 
             // When a checkbox is clicked in thead
             jQuery('thead input:checkbox', $table).on('click', function() {
                 var $checkedStatus = jQuery(this).prop('checked');
 
                 // Check or uncheck all checkboxes in tbody
-                jQuery('tbody input[name="ids[]"]:checkbox', $table).each(function() {
+                jQuery('tbody input[name="ids[]"]:checkbox', $table_target).each(function() {
                     var $checkbox = jQuery(this);
 
                     $checkbox.prop('checked', $checkedStatus);
@@ -681,38 +697,55 @@ var App = function() {
             });
 
             // When a checkbox is clicked in tbody
-            jQuery('tbody input[name="ids[]"]:checkbox', $table).on('click', function() {
+            jQuery('tbody input[name="ids[]"]:checkbox', $table_target).on('click', function() {
                 var $checkbox = jQuery(this);
 
                 uiHelperTableToolscheckRow($checkbox, $checkbox.prop('checked'));
             });
+        });
 
-            // When a row is clicked in tbody
-            // jQuery('tbody > tr', $table).on('click', function(e) {
-            //     if (e.target.type !== 'checkbox'
-            //             && e.target.type !== 'button'
-            //             && e.target.tagName.toLowerCase() !== 'a'
-            //             && !jQuery(e.target).parent('label').length) {
-            //         var $checkbox       = jQuery('input:checkbox', this);
-            //         var $checkedStatus  = $checkbox.prop('checked');
-            //
-            //         $checkbox.prop('checked', ! $checkedStatus);
-            //         uiHelperTableToolscheckRow($checkbox, ! $checkedStatus);
-            //     }
-            // });
+        jQuery('.js-table-checkable-left').each(function(){
+            var $table = jQuery(this);
+            var $table_target = jQuery('.js-table-checkable-target-left');
+            var $tr = $table_target.find('tr');
+
+            // When a checkbox is clicked in thead
+            jQuery('thead input:checkbox', $table).on('click', function() {
+                var $checkedStatus = jQuery(this).prop('checked');
+
+                // Check or uncheck all checkboxes in tbody
+                jQuery('tbody input[name="ids[]"]:checkbox', $table_target).each(function() {
+                    var $checkbox = jQuery(this);
+                    var $index = $table_target.find('input[name="ids[]"]:checkbox').index($(this));
+                    $checkbox.prop('checked', $checkedStatus);
+                    uiHelperTableToolscheckRow($checkbox, $checkedStatus, $index);
+                });
+            });
+
+            // When a checkbox is clicked in tbody
+            jQuery('tbody input[name="ids[]"]:checkbox', $table_target).on('click', function(e) {
+                var $checkbox = jQuery(this);
+                var $index = $table_target.find('input[name="ids[]"]:checkbox').index($(this));
+
+                uiHelperTableToolscheckRow($checkbox, $checkbox.prop('checked'), $index);
+            });
         });
     };
 
     // Checkable table functionality helper - Checks or unchecks table row
-    var uiHelperTableToolscheckRow = function($checkbox, $checkedStatus) {
+    var uiHelperTableToolscheckRow = function($checkbox, $checkedStatus, $index) {
         if ($checkedStatus) {
             $checkbox
                 .closest('tr')
                 .addClass('active');
+            $('.js-table-checkable-target').find('tr').eq($index).addClass('active');
+            $('#builder-table-right-body-inner').find('tr').eq($index).addClass('active');
         } else {
             $checkbox
                 .closest('tr')
                 .removeClass('active');
+            $('.js-table-checkable-target').find('tr').eq($index).removeClass('active');
+            $('#builder-table-right-body-inner').find('tr').eq($index).removeClass('active');
         }
     };
 
@@ -893,21 +926,23 @@ var App = function() {
                     onImageUpload: function(files) {
                         //上传图片到服务器
                         var formData = new FormData();
-                        formData.append('file', files[0]);
-                        $.ajax({
-                            url : dolphin.image_upload_url,//后台文件上传接口
-                            type : 'POST',
-                            data : formData,
-                            cache: false,
-                            processData : false,
-                            contentType : false,
-                            success : function(res) {
-                                if (res.code) {
-                                    $summernote.summernote('insertImage', res.path);
-                                } else {
-                                    Dolphin.notify(res.info, 'danger');
+                        $.each(files, function () {
+                            formData.append('file', $(this)[0]);
+                            $.ajax({
+                                url : dolphin.image_upload_url,//后台文件上传接口
+                                type : 'POST',
+                                data : formData,
+                                cache: false,
+                                processData : false,
+                                contentType : false,
+                                success : function(res) {
+                                    if (res.code) {
+                                        $summernote.summernote('insertImage', res.path);
+                                    } else {
+                                        Dolphin.notify(res.info, 'danger');
+                                    }
                                 }
-                            }
+                            });
                         });
                     }
                 }
@@ -1330,6 +1365,9 @@ var App = function() {
                 case 'uiScrollTo':
                     uiScrollTo();
                     break;
+                case 'uiYearCopy':
+                    uiYearCopy();
+                    break;
                 case 'uiLoader':
                     uiLoader('hide');
                     break;
@@ -1343,6 +1381,7 @@ var App = function() {
                     uiHandleTheme();
                     uiToggleClass();
                     uiScrollTo();
+                    uiYearCopy();
                     uiLoader('hide');
             }
         },

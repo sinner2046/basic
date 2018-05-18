@@ -3,8 +3,7 @@
 namespace api\v1\controller;
 
 use api\common\Api;
-
-use think\Request;
+use api\common\Token;
 
 class Index extends Api
 {
@@ -15,7 +14,9 @@ class Index extends Api
      */
     public function index()
     {
-        $this->sendSuccess(['ad']);
+
+
+        $this->sendSuccess(Token::get('b6190491c96d8af3df01ee00a408f094'));
     }
 
     /**

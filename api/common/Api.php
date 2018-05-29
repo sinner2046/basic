@@ -1,6 +1,7 @@
 <?php
 namespace api\common;
 
+use think\Loader;
 use think\Request;
 
 class Api
@@ -58,5 +59,41 @@ class Api
         if(!in_array($this->method, explode('|', $this->restMethodList))) {
             $this->sendError('Method Not Allowed', 405, 405);
         }
+    }
+
+    /**
+     * 验证数据
+     * @access protected
+     * @param  array        $data     数据
+     * @param  string|array $validate 验证器名或者验证规则数组
+     * @param  array        $message  提示信息
+     * @return array|string|true
+     */
+    protected function validate($data, $validate, $message = [])
+    {
+        if (is_array($validate)) {
+            $v = Loader::validate();
+            $v->rule($validate);
+        } else {
+            // 支持场景
+            if (strpos($validate, '.')) {
+                list($validate, $scene) = explode('.', $validate);
+            }
+
+            $v = Loader::validate($validate);
+
+            !empty($scene) && $v->scene($scene);
+        }
+
+        // 设置错误信息
+        if (is_array($message)) {
+            $v->message($message);
+        }
+
+        if (!$v->check($data)) {
+            $this->sendError($v->getError(), 500, 500);
+        }
+
+        return true;
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace api\index\controller;
+namespace api\exception\controller;
 
 use api\common\Send;
 

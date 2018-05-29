@@ -4,6 +4,7 @@ namespace api\v1\controller;
 
 use api\common\Api;
 use api\common\Token;
+use think\Log;
 
 class Index extends Api
 {
@@ -16,7 +17,10 @@ class Index extends Api
     {
 
 
-        $this->sendSuccess(Token::get('b6190491c96d8af3df01ee00a408f094'));
+        $msg = ['发髻','法发顺丰'];
+        Log::record($msg, 'pay');
+//        $this->sendSuccess(Token::set(['uid' => '1']));
+//        $this->sendSuccess(Token::get('a2d2e5219611b8ad1eb9f085e7e827f5'));
     }
 
     /**

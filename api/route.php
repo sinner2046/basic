@@ -10,7 +10,10 @@
 // +----------------------------------------------------------------------
 use think\Route;
 
-Route::miss('Error/index');
+Route::miss('exception/Error/index');
+
+Route::rule('v1/user/login','v1/User/login','POST');
+Route::rule('v1/test','v1/Test/test','GET');
 
 Route::resource('v1/index','v1/Index');
 

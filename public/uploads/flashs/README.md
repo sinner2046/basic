@@ -1,4 +1,2 @@
-DolphinPHP
-===============
 
 # flash目录

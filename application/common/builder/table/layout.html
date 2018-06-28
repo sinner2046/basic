@@ -182,10 +182,10 @@
                                     <table class="table table-builder table-hover table-bordered table-striped js-table-checkable">
                                         <colgroup>
                                             {if (!$hide_checkbox)}
-                                            <col>
+                                            <col width="50">
                                             {/if}
                                             {volist name="columns" id="column"}
-                                            <col class="{$column_hide[$column['name']]|default=''}">
+                                            <col width="{$column_width[$column['name']]|default='100'}" class="{$column_hide[$column['name']]|default=''}">
                                             {/volist}
                                         </colgroup>
                                         <thead>

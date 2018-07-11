@@ -91,7 +91,7 @@ class Api
         }
 
         if (!$v->check($data)) {
-            $this->sendError($v->getError(), 500, 500);
+            $this->sendError($v->getError(), 400, 400);
         }
 
         return true;

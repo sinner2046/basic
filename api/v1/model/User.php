@@ -6,6 +6,7 @@ use think\Model;
 class User extends Model
 {
     protected $autoWriteTimestamp = true;
+    protected $updateTime = false;
 
     protected $insert = ['reg_ip'];
 

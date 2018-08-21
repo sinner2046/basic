@@ -8,7 +8,7 @@ class User extends Model
     protected $autoWriteTimestamp = true;
     protected $updateTime = false;
 
-    protected $insert = ['reg_ip'];
+    protected $insert = ['reg_ip', 'status' => 1];
 
     /**
      * token过期时间秒数
@@ -52,9 +52,12 @@ class User extends Model
             ->field('id,nickname,avatar,sex,expires,status')
             ->find();
 
-        if (!$info) return '账户不存在';
-        if (time() > $info->expires) return 'token已过期';
-        if ($info->status != 1) return '账号已被禁用';
+        $time = time();
+        if (!$info || $info->status != 1) return '账户不存在或被禁用';
+        if ($time > $info->expires) return 'token已过期';
+
+        //token即将过期  刷新token有效期
+        if ($info->expires - $time < 60) self::update(['expires' => $time + self::$expires], ['token' => $token]);
 
         return [
             'id' => $info->id,

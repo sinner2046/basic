@@ -137,7 +137,7 @@ return [
         // 日志记录方式，内置 file socket 支持扩展
         'type'  => 'File',
         // 日志保存目录
-        'path'  => LOG_PATH,
+        'path'  => RUNTIME_PATH . DS . 'api' . DS . 'log' . DS,
         // 日志记录级别
         'level' => [],
     ],
@@ -158,10 +158,17 @@ return [
         // 驱动方式
         'type'   => 'File',
         // 缓存保存目录
-        'path'   => CACHE_PATH,
+        'path'   => RUNTIME_PATH . DS . 'api' . DS . 'cache' . DS,
         // 缓存前缀
         'prefix' => '',
         // 缓存有效期 0表示永久缓存
         'expire' => 0,
+    ],
+
+    //分页配置
+    'paginate'               => [
+        'type'      => 'bootstrap',
+        'var_page'  => 'page',
+        'list_rows' => 10,
     ]
 ];

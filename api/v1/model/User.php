@@ -49,11 +49,12 @@ class User extends Model
     public static function checkToken($token)
     {
         $info = self::where('token', $token)
-            ->field('id,nickname,avatar,sex,expires,status')
+            ->where('status', 1)
+            ->field('id,nickname,avatar,sex,expires')
             ->find();
 
         $time = time();
-        if (!$info || $info->status != 1) return '账户不存在或被禁用';
+        if (!$info) return '账户不存在或被禁用';
         if ($time > $info->expires) return 'token已过期';
 
         //token即将过期  刷新token有效期

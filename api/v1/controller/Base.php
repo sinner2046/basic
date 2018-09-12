@@ -18,7 +18,7 @@ class Base extends Api
     /**
      * 检测token
      */
-    private function checkToken()
+    protected function checkToken()
     {
         $token = $this->request->header('token');
         $this->validate(
